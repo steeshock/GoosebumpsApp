@@ -33,9 +33,7 @@
                 app:fontFamily="@font/ahs"
                 android:layout_marginStart="10dp"
                 android:gravity="start"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="10dp" />
+                android:layout_marginEnd="8dp"/>
 
             <TextView
                 android:id="@+id/tvBookDescription"
@@ -46,11 +44,9 @@
                 android:layout_marginStart="10dp"
                 android:maxLength="200"
                 android:layout_marginEnd="8dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="8dp" />
+                android:justificationMode="inter_word"/>
 
         </LinearLayout>
-
 
     </LinearLayout>
 

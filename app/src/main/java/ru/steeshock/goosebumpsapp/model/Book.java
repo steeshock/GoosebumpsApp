@@ -11,19 +11,23 @@ public class Book {
     @ColumnInfo(name = "_id")
     private int mId;
 
-    @ColumnInfo(name = "book_number")
-    private String mBookNumber;
+    @ColumnInfo(name = "book_image")
+    private int mBookImageResource;
 
     @ColumnInfo(name = "book_name")
     private String mBookName;
 
+    @ColumnInfo(name = "book_description")
+    private String mBookDescription;
+
     @ColumnInfo(name = "book_content")
     private String mBookContent;
 
-    public Book(int mId, String mBookName, String mBookContent) {
+    public Book(int mId, int mBookImage, String mBookName, String mBookDescription) {
         this.mId = mId;
+        this.mBookImageResource = mBookImage;
         this.mBookName = mBookName;
-        this.mBookContent = mBookContent;
+        this.mBookDescription = mBookDescription;
     }
 
     public int getId() {
@@ -42,11 +46,19 @@ public class Book {
         this.mBookName = mBookName;
     }
 
-    public String getBookContent() {
-        return mBookContent;
+    public int getBookImageResource() {
+        return mBookImageResource;
     }
 
-    public void setBookContent(String mBookContent) {
-        this.mBookContent = mBookContent;
+    public void setBookImageResource(int bookImageResource) {
+        mBookImageResource = bookImageResource;
+    }
+
+    public String getBookDescription() {
+        return mBookDescription;
+    }
+
+    public void setBookDescription(String bookDescription) {
+        mBookDescription = bookDescription;
     }
 }
