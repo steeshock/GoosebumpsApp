@@ -1,9 +1,11 @@
-package ru.steeshock.goosebumpsapp;
+package ru.steeshock.goosebumpsapp.ui;
 
-import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v4.view.ViewPager;
+import com.google.android.material.tabs.TabLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
+
+import ru.steeshock.goosebumpsapp.R;
 
 public class MainActivity extends AppCompatActivity {
 

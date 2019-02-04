@@ -1,8 +1,8 @@
 package ru.steeshock.goosebumpsapp.model;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 @Entity
 public class Book {
@@ -22,6 +22,9 @@ public class Book {
 
     @ColumnInfo(name = "book_content")
     private String mBookContent;
+
+    @ColumnInfo(name = "book_isFavorite")
+    private boolean mBookIsFavorite;
 
     public Book(int mId, int mBookImage, String mBookName, String mBookDescription) {
         this.mId = mId;
@@ -60,5 +63,13 @@ public class Book {
 
     public void setBookDescription(String bookDescription) {
         mBookDescription = bookDescription;
+    }
+
+    public boolean isBookIsFavorite() {
+        return mBookIsFavorite;
+    }
+
+    public void setBookIsFavorite(boolean bookIsFavorite) {
+        mBookIsFavorite = bookIsFavorite;
     }
 }

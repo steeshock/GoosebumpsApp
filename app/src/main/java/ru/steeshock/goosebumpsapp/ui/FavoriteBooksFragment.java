@@ -1,40 +1,39 @@
-package ru.steeshock.goosebumpsapp;
+package ru.steeshock.goosebumpsapp.ui;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageSwitcher;
 
+import ru.steeshock.goosebumpsapp.R;
 import ru.steeshock.goosebumpsapp.model.BookAdapter;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class BooksFragment extends Fragment {
+public class FavoriteBooksFragment extends Fragment {
     /**
      * The fragment argument representing the section number for this
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
     private RecyclerView mRecyclerView;
-    private BookAdapter mBookAdapter;
+    public static BookAdapter mBookAdapter; //todo Избавиться от static поля
     private LinearLayoutManager mLayoutLinearManager;
 
-    public BooksFragment() {
+    public FavoriteBooksFragment() {
     }
 
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static BooksFragment newInstance(int sectionNumber) {
-        BooksFragment fragment = new BooksFragment();
+    public static FavoriteBooksFragment newInstance(int sectionNumber) {
+        FavoriteBooksFragment fragment = new FavoriteBooksFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);

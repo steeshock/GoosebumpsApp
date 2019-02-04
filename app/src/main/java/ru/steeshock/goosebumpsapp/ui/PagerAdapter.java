@@ -1,8 +1,11 @@
-package ru.steeshock.goosebumpsapp;
+package ru.steeshock.goosebumpsapp.ui;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+
+import ru.steeshock.goosebumpsapp.ui.BooksFragment;
+import ru.steeshock.goosebumpsapp.ui.FavoriteBooksFragment;
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -24,7 +27,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
                 fragment = BooksFragment.newInstance(position);
                 break;
             case 1:
-                fragment = BooksFragment.newInstance(position);
+                fragment = FavoriteBooksFragment.newInstance(position);
                 break;
         }
         return fragment;
