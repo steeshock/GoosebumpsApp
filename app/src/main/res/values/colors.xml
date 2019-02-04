@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
+    <!--color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#D81B60</color-->
 
     <color name="Broom">#fefb16</color>
     <color name="SpaceCadet">#1c2a57</color>
     <color name="NileBlue">#18384f</color>
     <color name="Slime">#1be215</color>
+
+    <color name="colorPrimaryDark">#282828</color>
+    <color name="colorPrimary">#404040</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="Romance">#fefefe</color>
+    <color name="DarkMedium">#a9a9a9</color>
+
 </resources>

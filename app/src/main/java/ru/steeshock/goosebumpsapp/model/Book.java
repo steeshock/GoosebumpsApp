@@ -33,6 +33,14 @@ public class Book {
         this.mBookDescription = mBookDescription;
     }
 
+    public Book(int mId, int mBookImage, String mBookName, String mBookDescription, boolean mBookIsFavorite) {
+        this.mId = mId;
+        this.mBookImageResource = mBookImage;
+        this.mBookName = mBookName;
+        this.mBookDescription = mBookDescription;
+        this.mBookIsFavorite = mBookIsFavorite;
+    }
+
     public int getId() {
         return mId;
     }

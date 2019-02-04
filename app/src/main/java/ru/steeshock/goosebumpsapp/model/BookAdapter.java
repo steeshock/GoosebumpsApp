@@ -2,7 +2,6 @@ package ru.steeshock.goosebumpsapp.model;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +9,17 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.steeshock.goosebumpsapp.ui.FavoriteBooksFragment;
 import ru.steeshock.goosebumpsapp.R;
+import ru.steeshock.goosebumpsapp.ui.BooksFragment;
+import ru.steeshock.goosebumpsapp.ui.FavoriteBooksFragment;
 
-import static android.content.ContentValues.TAG;
 import static ru.steeshock.goosebumpsapp.model.BooksInfo.booksDescription;
 import static ru.steeshock.goosebumpsapp.model.BooksInfo.booksNames;
 import static ru.steeshock.goosebumpsapp.model.BooksInfo.imagesCollection;
 
 public class BookAdapter extends RecyclerView.Adapter<BookHolder> {
 
-    private final List<Book> mBook = new ArrayList<>();
+    private List<Book> mBook = new ArrayList<>();
 
     @NonNull
     @Override
@@ -33,19 +32,27 @@ public class BookAdapter extends RecyclerView.Adapter<BookHolder> {
     @Override
     public void onBindViewHolder(@NonNull final BookHolder holder, final int position) {
         final Book book = mBook.get(position);
-        holder.bind(book);
 
-        holder.mAnimationView.setOnClickListener(new View.OnClickListener() {
+        holder.mFavoriteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                holder.startCheckAnimation();
-
-                if(!FavoriteBooksFragment.mBookAdapter.mBook.contains(book))
+                if(!FavoriteBooksFragment.mBookAdapter.mBook.contains(book)){
+                    book.setBookIsFavorite(true);
+                    holder.mFavoriteIcon.setImageResource(R.drawable.like);
                     FavoriteBooksFragment.mBookAdapter.addFavoriteBook(book);
-                else FavoriteBooksFragment.mBookAdapter.removeFavoriteBook(book);
+                }
+                else {
+                    book.setBookIsFavorite(false);
+                    holder.mFavoriteIcon.setImageResource(R.drawable.dislike_w);
+                    FavoriteBooksFragment.mBookAdapter.removeFavoriteBook(book);
+                    BooksFragment.mBookAdapter.notifyDataSetChanged(); //Обновляем данные в первом фрагменте после удаления из второго
+                }
             }
         });
+
+        holder.bind(book);
+
     }
 
     @Override
@@ -56,9 +63,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookHolder> {
     public void createBooksStub(){
         for (int i=1;i<=11;i++){
 
+            // Создание коротких описаний для каждой книги
             int lastDotIndex = booksDescription[i-1].indexOf(".", 100);
             int lastTrimIndex = booksDescription[i-1].indexOf(" ", 100);
-            Log.d(TAG, "createBooksStub: " + lastDotIndex);
+
             if (lastDotIndex < 150)
                 mBook.add(new Book(i, imagesCollection[i-1], booksNames[i-1], booksDescription[i-1].substring(0, lastDotIndex).concat("...")));
             else mBook.add(new Book(i, imagesCollection[i-1], booksNames[i-1], booksDescription[i-1].substring(0, lastTrimIndex).concat("...")));
@@ -68,14 +76,23 @@ public class BookAdapter extends RecyclerView.Adapter<BookHolder> {
     }
 
     public void addFavoriteBook(Book book){
-        if (!mBook.contains(book))
-            mBook.add(book);
+        for (Book b:mBook
+             ) {
+            if(book.getId()==b.getId())
+                return;
+        }
+        mBook.add(book);
+
         notifyDataSetChanged();
     }
 
     public void removeFavoriteBook(Book book){
-        if (mBook.contains(book))
-            mBook.remove(book);
+        mBook.remove(book);
+        notifyDataSetChanged();
+    }
+
+    public void clearList(){
+        mBook.clear();
         notifyDataSetChanged();
     }
 }
