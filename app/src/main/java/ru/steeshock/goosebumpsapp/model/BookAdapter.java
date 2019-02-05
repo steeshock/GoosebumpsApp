@@ -97,7 +97,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookHolder> {
     }
 
     public void createBooksStub(){
-        for (int i=1;i<=11;i++){
+        for (int i=1;i<=20;i++){
 
             Book book;
 

@@ -2,73 +2,89 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     app:cardBackgroundColor="@color/colorPrimary"
     android:layout_margin="10dp"
     app:cardCornerRadius="8dp"
     android:layout_width="match_parent"
-    android:layout_height="200dp">
+    android:layout_height="190dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
-
-        <ImageView
-            android:id="@+id/ivBookImage"
-            android:layout_width="100dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="10dp"/>
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvBookNumber"
-                app:fontFamily="@font/bloodyslime"
-                android:textSize="22sp"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:textColor="@color/Romance" />
-
-            <TextView
-                android:id="@+id/tvBookName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/Romance"
-                app:fontFamily="@font/ahs"
-                android:layout_marginStart="10dp"
-                android:gravity="start"
-                android:layout_marginEnd="8dp"/>
-
-            <TextView
-                android:id="@+id/tvBookDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/DarkMedium"
-                android:layout_marginTop="10dp"
-                android:textSize="12sp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="8dp"
-                android:justificationMode="inter_word"/>
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteY="10dp">
 
             <ImageView
-                android:id="@+id/ivFavorite"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="end"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/dislike_w"/>
+                android:id="@+id/ivBookImage"
+                android:layout_width="100dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvBookNumber"
+                    android:layout_width="30dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/Romance"
+                    android:textSize="22sp"
+                    app:fontFamily="@font/bloodyslime" />
+
+                <TextView
+                    android:id="@+id/tvBookName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="start"
+                    android:textColor="@color/Romance"
+                    android:textSize="14sp"
+                    app:fontFamily="@font/ahs" />
+
+                <TextView
+                    android:id="@+id/tvBookDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:justificationMode="inter_word"
+                    android:textColor="@color/DarkMedium"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/ivFavorite"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/dislike_w"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout"
+            app:layout_constraintVertical_bias="0.943" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
