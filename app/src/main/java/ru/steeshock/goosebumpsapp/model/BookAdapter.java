@@ -3,6 +3,7 @@ package ru.steeshock.goosebumpsapp.model;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,18 +17,17 @@ import ru.steeshock.goosebumpsapp.R;
 import ru.steeshock.goosebumpsapp.ui.BooksFragment;
 import ru.steeshock.goosebumpsapp.ui.FavoriteBooksFragment;
 import ru.steeshock.goosebumpsapp.ui.MainActivity;
-import ru.steeshock.goosebumpsapp.utils.UserSettings;
 
 import static ru.steeshock.goosebumpsapp.model.BooksInfo.booksDescription;
 import static ru.steeshock.goosebumpsapp.model.BooksInfo.booksNames;
 import static ru.steeshock.goosebumpsapp.model.BooksInfo.imagesCollection;
-import static ru.steeshock.goosebumpsapp.utils.UserSettings.FAVORITE_BOOKS_KEY;
+import static ru.steeshock.goosebumpsapp.utils.UserSettings.FAVORITE_BOOKS_SET_KEY;
 
 public class BookAdapter extends RecyclerView.Adapter<BookHolder> {
 
     private List<Book> mBook = new ArrayList<>();
-    private UserSettings mUserSettings;
     private Set<String> favorites = new HashSet<>();
+    private static final String TAG = "KEKE";
 
     @NonNull
     @Override
@@ -46,18 +46,34 @@ public class BookAdapter extends RecyclerView.Adapter<BookHolder> {
             public void onClick(View v) {
 
                 if(!FavoriteBooksFragment.mBookAdapter.mBook.contains(book)){
+
                     book.setBookIsFavorite(true);
                     holder.mFavoriteIcon.setImageResource(R.drawable.like);
                     FavoriteBooksFragment.mBookAdapter.addFavoriteBook(book);
-                    //favorites.add("" + book.getId());
-                    MainActivity.mUserSettings.mSharedPreferences.edit().putInt(FAVORITE_BOOKS_KEY, book.getId()).apply();
-                    //MainActivity.mUserSettings.mSharedPreferences.edit().putStringSet(FAVORITE_BOOKS_KEY, favorites).apply();
-                    //Log.d(TAG, "onClick: " + favorites.toString());
+
+                    //Set of Favorites//
+                    favorites = MainActivity.mUserSettings.mSharedPreferences.getStringSet(FAVORITE_BOOKS_SET_KEY, favorites);
+                    favorites.add("" + book.getId());
+                    MainActivity.mUserSettings.mSharedPreferences.edit().clear().apply();
+                    MainActivity.mUserSettings.mSharedPreferences.edit().putStringSet(FAVORITE_BOOKS_SET_KEY, favorites).apply();
+                    Log.d(TAG, "1   " + favorites.toString());
+                    Log.d(TAG, "2   " + MainActivity.mUserSettings.mSharedPreferences.getStringSet(FAVORITE_BOOKS_SET_KEY, favorites));
+                    ///////////////////
+
                 }
                 else {
                     book.setBookIsFavorite(false);
                     holder.mFavoriteIcon.setImageResource(R.drawable.dislike_w);
                     FavoriteBooksFragment.mBookAdapter.removeFavoriteBook(book);
+
+                    //Set of Favorites//
+                    favorites = MainActivity.mUserSettings.mSharedPreferences.getStringSet(FAVORITE_BOOKS_SET_KEY, favorites);
+                    favorites.remove("" + book.getId());
+                    MainActivity.mUserSettings.mSharedPreferences.edit().clear().apply();
+                    MainActivity.mUserSettings.mSharedPreferences.edit().putStringSet(FAVORITE_BOOKS_SET_KEY, favorites).apply();
+                    Log.d(TAG, "3 " + favorites.toString());
+                    ///////////////////
+
                     BooksFragment.mBookAdapter.notifyDataSetChanged(); //Обновляем данные в первом фрагменте после удаления из второго
                 }
             }
@@ -65,11 +81,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookHolder> {
 
         holder.bind(book);
 
-    }
-
-    @Override
-    public int getItemCount() {
-        return mBook.size();
     }
 
     public void createBooksStub(){
@@ -82,7 +93,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookHolder> {
             int lastTrimIndex = booksDescription[i-1].indexOf(" ", 100);
 
             if (lastDotIndex < 150){
-                if(i == MainActivity.mUserSettings.mSharedPreferences.getInt(FAVORITE_BOOKS_KEY, 1)){
+                if(MainActivity.mUserSettings.mSharedPreferences.getStringSet(FAVORITE_BOOKS_SET_KEY, favorites).contains(i + "")){
                     book = new Book(i, imagesCollection[i-1], booksNames[i-1], booksDescription[i-1].substring(0, lastDotIndex).concat("..."), true);
                     FavoriteBooksFragment.mBookAdapter.mBook.add(book);
                     mBook.add(book);
@@ -93,7 +104,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookHolder> {
 
             }
             else {
-                if(i == MainActivity.mUserSettings.mSharedPreferences.getInt(FAVORITE_BOOKS_KEY, 1)){
+                if(MainActivity.mUserSettings.mSharedPreferences.getStringSet(FAVORITE_BOOKS_SET_KEY, favorites).contains(i + "")){
                     book = new Book(i, imagesCollection[i-1], booksNames[i-1], booksDescription[i-1].substring(0, lastTrimIndex).concat("..."), true);
                     FavoriteBooksFragment.mBookAdapter.mBook.add(book);
                     mBook.add(book);
@@ -126,5 +137,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookHolder> {
     public void clearList(){
         mBook.clear();
         notifyDataSetChanged();
+    }
+
+
+    @Override
+    public int getItemCount() {
+        return mBook.size();
     }
 }
