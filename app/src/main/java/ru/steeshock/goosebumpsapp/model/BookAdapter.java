@@ -3,10 +3,12 @@ package ru.steeshock.goosebumpsapp.model;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,10 +19,12 @@ import ru.steeshock.goosebumpsapp.R;
 import ru.steeshock.goosebumpsapp.ui.BooksFragment;
 import ru.steeshock.goosebumpsapp.ui.FavoriteBooksFragment;
 import ru.steeshock.goosebumpsapp.ui.MainActivity;
+import ru.steeshock.goosebumpsapp.ui.ReaderActivity;
 
 import static ru.steeshock.goosebumpsapp.model.BooksInfo.booksDescription;
 import static ru.steeshock.goosebumpsapp.model.BooksInfo.booksNames;
 import static ru.steeshock.goosebumpsapp.model.BooksInfo.imagesCollection;
+import static ru.steeshock.goosebumpsapp.utils.UserSettings.BOOK_ID;
 import static ru.steeshock.goosebumpsapp.utils.UserSettings.FAVORITE_BOOKS_SET_KEY;
 
 public class BookAdapter extends RecyclerView.Adapter<BookHolder> {
@@ -79,8 +83,17 @@ public class BookAdapter extends RecyclerView.Adapter<BookHolder> {
             }
         });
 
-        holder.bind(book);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startReaderActivity = new Intent(v.getContext(), ReaderActivity.class);
+                startReaderActivity.putExtra(BOOK_ID, book.getId());
+                v.getContext().startActivity (startReaderActivity);
+                Toast.makeText(v.getContext(), holder.mBookName.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
+        holder.bind(book);
     }
 
     public void createBooksStub(){

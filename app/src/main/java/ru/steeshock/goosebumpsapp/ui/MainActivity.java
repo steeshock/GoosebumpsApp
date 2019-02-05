@@ -12,8 +12,6 @@ import java.util.Set;
 import ru.steeshock.goosebumpsapp.R;
 import ru.steeshock.goosebumpsapp.utils.UserSettings;
 
-import static android.content.ContentValues.TAG;
-import static ru.steeshock.goosebumpsapp.utils.UserSettings.FAVORITE_BOOKS_SET_KEY;
 
 
 public class MainActivity extends AppCompatActivity {

@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
+    app:cardBackgroundColor="@color/colorPrimary"
     android:layout_margin="10dp"
     app:cardCornerRadius="8dp"
     android:layout_width="match_parent"
@@ -29,46 +30,46 @@
                 android:id="@+id/tvBookNumber"
                 app:fontFamily="@font/bloodyslime"
                 android:textSize="22sp"
-                android:textColor="@android:color/black"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/Romance"/>
 
             <TextView
                 android:id="@+id/tvBookName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"
+                android:textColor="@color/Romance"
                 app:fontFamily="@font/ahs"
                 android:layout_marginStart="10dp"
                 android:gravity="start"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="10dp" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="8dp" />
 
             <TextView
                 android:id="@+id/tvBookDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/DarkMedium"
                 android:layout_marginTop="10dp"
                 android:textSize="12sp"
                 android:layout_marginStart="10dp"
-                android:maxLength="200"
                 android:layout_marginEnd="8dp"
+                android:justificationMode="inter_word"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="8dp" />
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottieAnimationView"
+            <ImageView
+                android:id="@+id/ivFavorite"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="end"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
-                android:scaleType="fitCenter"
-                app:lottie_fileName="like.json"
+                android:src="@drawable/dislike_w"
                 android:layout_marginRight="16dp" />
 
         </LinearLayout>
