@@ -7,7 +7,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
-        versionName "im_1.0"
+        versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -32,5 +32,7 @@ dependencies {
 
     implementation 'androidx.cardview:cardview:1.0.0'
 
-    implementation 'com.airbnb.android:lottie:3.0.0-beta1'
+    //implementation 'com.airbnb.android:lottie:3.0.0-beta1'
+
+    implementation 'com.github.barteksc:android-pdf-viewer:3.1.0-beta.1'
 }

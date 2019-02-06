@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.airbnb.lottie.LottieAnimationView;
-
 import ru.steeshock.goosebumpsapp.R;
 
 import static android.content.ContentValues.TAG;

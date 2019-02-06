@@ -1,5 +1,7 @@
 package ru.steeshock.goosebumpsapp.ui;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import ru.steeshock.goosebumpsapp.R;
 import ru.steeshock.goosebumpsapp.model.BookAdapter;
@@ -47,8 +50,9 @@ public class BooksFragment extends Fragment {
         return fragment;
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
