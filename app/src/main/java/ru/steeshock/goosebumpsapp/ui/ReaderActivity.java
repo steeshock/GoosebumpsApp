@@ -11,6 +11,7 @@ import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.listener.OnPageErrorListener;
+import com.github.barteksc.pdfviewer.listener.OnPageScrollListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
 import com.shockwave.pdfium.PdfDocument;
@@ -26,13 +27,14 @@ import static ru.steeshock.goosebumpsapp.utils.UserSettings.NIGHT_MODE;
 import static ru.steeshock.goosebumpsapp.utils.UserSettings.READER_CLICKED;
 import static ru.steeshock.goosebumpsapp.utils.UserSettings.SAVED_PAGE;
 
-public class ReaderActivity extends AppCompatActivity implements OnPageChangeListener, OnLoadCompleteListener, OnPageErrorListener {
+public class ReaderActivity extends AppCompatActivity implements OnPageChangeListener, OnLoadCompleteListener, OnPageErrorListener, OnPageScrollListener {
 
     private static final String TAG = "KEKE";
     private PDFView mPDFView;
     private Integer mPageNumber = 1;
     private ImageView mImageView;
     private LinearLayout mMainContent;
+    private DefaultScrollHandle handle;
 
     private int mId;
     private boolean isNightMode = true;
@@ -44,6 +46,8 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reader);
 
+        mId = getIntent().getIntExtra(BOOK_ID, 0);
+
         if(savedInstanceState!=null){
             isNightMode = savedInstanceState.getBoolean(NIGHT_MODE);
             mPageNumber = savedInstanceState.getInt(SAVED_PAGE);
@@ -54,7 +58,7 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
         mImageView = findViewById(R.id.ivNightMode);
         mMainContent = findViewById(R.id.main_content);
 
-        mId = getIntent().getIntExtra(BOOK_ID, 0);
+        handle = new DefaultScrollHandle(this);
         readBookFromAsset(booksPaths[mId-1]);
 
         setDayOrNightModeForIcon();
@@ -64,8 +68,15 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
         mPDFView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideSystemUI();
-                hideNightModeIcon();
+                if (handle.shown()){
+                    isReaderClicked = false;
+                    hideSystemUI();
+                    hideNightModeIcon();
+                } else {
+                    isReaderClicked = true;
+                    hideSystemUI();
+                    hideNightModeIcon();
+                }
             }
         });
 
@@ -88,6 +99,8 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
         if (isReaderClicked){
             isReaderClicked = false;
             mImageView.setVisibility(View.INVISIBLE);
+            //if(handle.shown())
+                //handle.hide();
         } else {
             isReaderClicked = true;
             mImageView.setVisibility(View.VISIBLE);
@@ -148,12 +161,13 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
                 .onPageChange(this)
                 .enableAnnotationRendering(true)
                 .onLoad(this)
-                .scrollHandle(new DefaultScrollHandle(this))
+                .scrollHandle(handle)
+                .onPageScroll(this)
                 .onPageError(this)
                 .pageFitPolicy(FitPolicy.WIDTH)
                 .swipeHorizontal(true)
                 .pageSnap(true)
-                .autoSpacing(true)
+                //.autoSpacing(true)
                 .pageFling(true)
                 .nightMode(isNightMode)
                 .load();
@@ -182,5 +196,14 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
     @Override
     public void onPageError(int page, Throwable t){
         Log.e(TAG, "Cannot load page " + page);
+    }
+
+    @Override
+    public void onPageScrolled(int page, float positionOffset) {
+
+        Log.d(TAG, "onPageScrolled: ");
+        handle.hideDelayed();
+        isReaderClicked = true;
+        hideNightModeIcon();
     }
 }
