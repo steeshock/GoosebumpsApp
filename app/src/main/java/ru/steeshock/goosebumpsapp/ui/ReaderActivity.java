@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -23,6 +22,8 @@ import ru.steeshock.goosebumpsapp.R;
 
 import static ru.steeshock.goosebumpsapp.model.BooksInfo.booksPaths;
 import static ru.steeshock.goosebumpsapp.utils.UserSettings.BOOK_ID;
+import static ru.steeshock.goosebumpsapp.utils.UserSettings.NIGHT_MODE;
+import static ru.steeshock.goosebumpsapp.utils.UserSettings.READER_CLICKED;
 import static ru.steeshock.goosebumpsapp.utils.UserSettings.SAVED_PAGE;
 
 public class ReaderActivity extends AppCompatActivity implements OnPageChangeListener, OnLoadCompleteListener, OnPageErrorListener {
@@ -34,8 +35,8 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
     private LinearLayout mMainContent;
 
     private int mId;
-    private static boolean nightMode = true;
-    private static boolean isReaderClicked = true;
+    private boolean isNightMode = true;
+    private boolean isReaderClicked = true;
 
 
     @Override
@@ -43,8 +44,11 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reader);
 
-        if(savedInstanceState!=null)
+        if(savedInstanceState!=null){
+            isNightMode = savedInstanceState.getBoolean(NIGHT_MODE);
             mPageNumber = savedInstanceState.getInt(SAVED_PAGE);
+        }
+
 
         mPDFView = findViewById(R.id.pdfView);
         mImageView = findViewById(R.id.ivNightMode);
@@ -54,6 +58,7 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
         readBookFromAsset(booksPaths[mId-1]);
 
         setDayOrNightModeForIcon();
+        setDayOrNightBackgroundForMainContent();
         hideSystemUI();
 
         mPDFView.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +77,13 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
         });
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVED_PAGE, mPageNumber);
+        outState.putBoolean(NIGHT_MODE, isNightMode);
+    }
+
     private void hideNightModeIcon() {
         if (isReaderClicked){
             isReaderClicked = false;
@@ -83,14 +95,9 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
     }
 
     private void hideSystemUI() {
-        // Enables regular immersive mode.
-        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
-        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        // Set the content to appear under the system bars so that the
-                        // content doesn't resize when the system bars hide and show.
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -109,23 +116,16 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
 
     private void changeMode(){
 
-        /*if (counter >= booksPaths.length)
-            counter = 0;
-
-        String newPath = booksPaths[counter];
-        counter++;
-        readBookFromAsset(newPath);*/
-
-        nightMode = !nightMode;
+        isNightMode = !isNightMode;
         setDayOrNightModeForIcon();
         setDayOrNightBackgroundForMainContent();
-        mPDFView.setNightMode(nightMode);
+        mPDFView.setNightMode(isNightMode);
         mPDFView.loadPages();
 
     }
 
     private void setDayOrNightBackgroundForMainContent() {
-        if(nightMode){
+        if(isNightMode){
             mMainContent.setBackgroundColor(Color.BLACK);
             mPDFView.setBackgroundColor(Color.BLACK);
         }else {
@@ -136,7 +136,7 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
     }
 
     private void setDayOrNightModeForIcon() {
-        if(nightMode)
+        if(isNightMode)
             mImageView.setImageResource(R.drawable.night_on);
         else mImageView.setImageResource(R.drawable.night_off);
     }
@@ -149,14 +149,13 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
                 .enableAnnotationRendering(true)
                 .onLoad(this)
                 .scrollHandle(new DefaultScrollHandle(this))
-                //.spacing(10) // in dp
                 .onPageError(this)
                 .pageFitPolicy(FitPolicy.WIDTH)
                 .swipeHorizontal(true)
                 .pageSnap(true)
                 .autoSpacing(true)
                 .pageFling(true)
-                .nightMode(nightMode)
+                .nightMode(isNightMode)
                 .load();
 
     }
@@ -183,11 +182,5 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
     @Override
     public void onPageError(int page, Throwable t){
         Log.e(TAG, "Cannot load page " + page);
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(SAVED_PAGE, mPageNumber);
     }
 }
