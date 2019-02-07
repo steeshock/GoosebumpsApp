@@ -3,8 +3,6 @@ package ru.steeshock.goosebumpsapp.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.List;
-
 public class UserSettings {
 
     public SharedPreferences mSharedPreferences;
