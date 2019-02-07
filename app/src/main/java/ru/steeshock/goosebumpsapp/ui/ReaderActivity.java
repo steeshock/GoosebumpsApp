@@ -19,6 +19,7 @@ import com.shockwave.pdfium.PdfDocument;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import ru.steeshock.goosebumpsapp.R;
 
 import static ru.steeshock.goosebumpsapp.model.BooksInfo.booksPaths;
@@ -33,7 +34,7 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
     private PDFView mPDFView;
     private Integer mPageNumber = 1;
     private ImageView mImageView;
-    private LinearLayout mMainContent;
+    private ConstraintLayout mMainContent;
     private DefaultScrollHandle handle;
 
     private int mId;
@@ -57,6 +58,7 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
         mPDFView = findViewById(R.id.pdfView);
         mImageView = findViewById(R.id.ivNightMode);
         mMainContent = findViewById(R.id.main_content);
+        mImageView.bringToFront();
 
         handle = new DefaultScrollHandle(this);
         readBookFromAsset(booksPaths[mId-1]);
@@ -68,6 +70,9 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
         mPDFView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.d(TAG, "onClick: " + handle.shown());
+
                 if (handle.shown()){
                     isReaderClicked = false;
                     hideSystemUI();
@@ -95,12 +100,30 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
         outState.putBoolean(NIGHT_MODE, isNightMode);
     }
 
+    private void readBookFromAsset(String path){
+
+        mPDFView.fromAsset(path)
+                .defaultPage(mPageNumber)
+                .onPageChange(this)
+                .enableAnnotationRendering(true)
+                .onLoad(this)
+                .scrollHandle(handle)
+                .onPageScroll(this)
+                .onPageError(this)
+                .pageFitPolicy(FitPolicy.WIDTH)
+                .swipeHorizontal(true)
+                .pageSnap(true)
+                //.autoSpacing(true)
+                .pageFling(true)
+                .nightMode(isNightMode)
+                .load();
+
+    }
+
     private void hideNightModeIcon() {
         if (isReaderClicked){
             isReaderClicked = false;
             mImageView.setVisibility(View.INVISIBLE);
-            //if(handle.shown())
-                //handle.hide();
         } else {
             isReaderClicked = true;
             mImageView.setVisibility(View.VISIBLE);
@@ -154,26 +177,6 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
         else mImageView.setImageResource(R.drawable.night_off);
     }
 
-    private void readBookFromAsset(String path){
-
-        mPDFView.fromAsset(path)
-                .defaultPage(mPageNumber)
-                .onPageChange(this)
-                .enableAnnotationRendering(true)
-                .onLoad(this)
-                .scrollHandle(handle)
-                .onPageScroll(this)
-                .onPageError(this)
-                .pageFitPolicy(FitPolicy.WIDTH)
-                .swipeHorizontal(true)
-                .pageSnap(true)
-                //.autoSpacing(true)
-                .pageFling(true)
-                .nightMode(isNightMode)
-                .load();
-
-    }
-
     @Override
     public void onPageChanged(int page, int pageCount) {
         mPageNumber = page;
@@ -201,7 +204,6 @@ public class ReaderActivity extends AppCompatActivity implements OnPageChangeLis
     @Override
     public void onPageScrolled(int page, float positionOffset) {
 
-        Log.d(TAG, "onPageScrolled: ");
         handle.hideDelayed();
         isReaderClicked = true;
         hideNightModeIcon();
